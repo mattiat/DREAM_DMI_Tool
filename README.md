@@ -13,13 +13,14 @@ The source code is hosted at: https://github.com/mattiat/DREAM_DMI_Tool
 ## PREREQUISITES
 The tool was tested on Ubuntu Linux 18.04 and ContOS Linux 7.5.
 
-Either docker or singularity must be installed. Please visit https://www.docker.com or http://singularity.lbl.gov
+Either ```docker``` or ```singularity``` must be installed. Please visit https://www.docker.com or http://singularity.lbl.gov
 
 Some of the Methods may require large amount of resources, depending on your input.
 
 ## INSTALLATION
-To install: ./install
-To uninstall: ./uninstall
+To install: ```./install```
+
+To uninstall: ```./uninstall```
 
 ## RUNNING
-To run, invoke, from any location: dream_dmi --help
+To run, invoke, from any location: ```dream_dmi --help```
