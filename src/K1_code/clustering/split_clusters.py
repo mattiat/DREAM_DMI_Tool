@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-""" Copyright 2018 Mattia Tomasoni <mattia.tomasoni@unil.ch>
+""" Copyright 2018 Bergmann's Lab UNIL <mattia.tomasoni@unil.ch>
 
 This file is part of DREAM DMI Tool.
 
