@@ -1,4 +1,4 @@
-Welcome and thank you for cloning DreamDMI.
+Welcome and thank you.
 
 DreamDMI is a Linux command-line tool for Disease Module Identification in 
 molecular networks, leveraging the top performing methods of the “Disease 
