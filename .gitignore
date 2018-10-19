@@ -1,3 +1,4 @@
+.DS_Store
 test/input/1*.txt
 test/input/2*.txt
 test/input/4*.txt
