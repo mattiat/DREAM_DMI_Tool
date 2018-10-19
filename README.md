@@ -11,11 +11,12 @@ This repository holds the source code for **DreamDMI**, a command-line tool for 
 The source code is hosted at: https://github.com/mattiat/DREAM_DMI_Tool
 
 ## PREREQUISITES
-The tool was tested on *Ubuntu Linux 18.04* and *CentOS Linux 7.5*.
-
 Either ```docker``` or ```singularity``` must be installed. Please visit https://www.docker.com or http://singularity.lbl.gov
 
 Some of the Methods may require large amount of resources, depending on your input.
+
+The tool was tested on *Ubuntu Linux 18.04* and *CentOS Linux 7.5*.
+
 
 ## INSTALLATION
 To install: ```./install```
@@ -31,4 +32,4 @@ The format for the input network is the following: a tab-separated file containi
 ```[nodeA]	[nodeB]	[weight_AB]```
 
 
-For an example, see the contents of test/input
+For an example, see the contents of test/input/.
