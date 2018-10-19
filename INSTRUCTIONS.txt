@@ -21,7 +21,7 @@ From any location, run:
 $ dream_dmi --help
 $ dream_dmi --input=/tmp/input.txt [—-output=] —-method=M1 --container=docker
 
-Example input network: see README.md
+Example input network: see the content of test/input/ and read README.md
 
 5) COLLECT THE OUTPUT
 Two output files will be produced in the directory where you run the command, marked with a timestamp and the name of your input network. One containing the run time outputs and the other containing the results of your analysis.
