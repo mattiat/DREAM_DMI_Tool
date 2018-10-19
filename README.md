@@ -26,8 +26,9 @@ To uninstall: ```./uninstall```
 To run, invoke, from any location: ```dream_dmi --help```
 
 ## INPUT
-The format for the input network is the following, tab-separated:
-One line for each edge, connecting two nodes nodeA and nodeB with weight weight_AB
-[nodeA]	[nodeB] weight_AB
+The format for the input network is the following: a tab-separated file containing one line for each edge. If an edge is connecting two nodes, nodeA and nodeB, with weight weight_AB, the file will contain the entry:
+
+```[nodeA]	[nodeB]	[weight_AB]```
+
 
 For an example, see the contents of test/input
