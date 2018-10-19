@@ -31,7 +31,7 @@ The format for the input network is the following: a tab-separated file containi
 
 ```[nodeA]	[nodeB]	[weight_AB]```
 
-nodeA and nodeB are type integer, weight_AB is type float
+nodeA and nodeB are of type *integer*, weight_AB is of type *float*
 
 
 For an example, see the contents of test/input/.
