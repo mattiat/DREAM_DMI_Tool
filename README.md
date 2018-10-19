@@ -24,3 +24,10 @@ To uninstall: ```./uninstall```
 
 ## RUNNING
 To run, invoke, from any location: ```dream_dmi --help```
+
+## INPUT
+The format for the input network is the following, tab-separated:
+One line for each edge, connecting two nodes nodeA and nodeB with weight weight_AB
+[nodeA]	[nodeB] weight_AB
+
+For an example, see the contents of test/input
