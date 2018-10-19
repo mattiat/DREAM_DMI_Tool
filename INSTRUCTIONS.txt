@@ -6,11 +6,14 @@ Module Identification (DMI) DREAM Challenge”.
 For more information on the Challenge:
 please visit: https://www.synapse.org/modulechallenge
 
-1) GET THE CODE
-git pull https://github.com/mattiat/DREAM_DMI_Tool.git
-
-2) INSTALL DOCKER OR SINGULARITY
+1) INSTALL DOCKER OR SINGULARITY
 https://www.docker.com or http://singularity.lbl.gov.
+
+2) README
+https://github.com/mattiat/DREAM_DMI_Tool/blob/master/README.md
+
+3) GET THE CODE
+git pull https://github.com/mattiat/DREAM_DMI_Tool.git
 
 3) INSTALL DreamDMI
 $ ./install
@@ -27,3 +30,5 @@ Example input network: see the content of test/input/ and read README.md.
 Two output files will be produced in the directory where you run the command,
 marked with a timestamp and the name of your input network: one file containing
 the run-time outputs and the other containing the results of your analysis.
+
+QUESTIONS, BUG-REPORTS: Mattia Tomasoni, <mattia.tomasoni@unil.ch>
