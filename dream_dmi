@@ -189,7 +189,9 @@ if [ "$output" != "not_set" ]; then
   fi
   # remove trailing slash if present
   if [[ $output == */ ]]; then
-    output=${output::-1}
+    #output=${output::-1}
+    output=${output::${#output}-1}
+    
   fi
 else
   output=$working_dir

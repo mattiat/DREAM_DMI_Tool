@@ -25,15 +25,7 @@
 echo
 echo "Uninstalling the DREAM_DMI TOOL"
 
-# check whether dream_dmi is actually installed
-if grep -q dream_dmi_tool ~/.bashrc; then
-  # remove dream_dmi dir from PATH
-  sed -i '/dream_dmi_tool/d' ~/.bashrc
-  # remove dream_dmi folder from the file system
-  rm -rf ~/.dream_dmi_tool
-  echo FINISHED: dream_dmi was UNINSTALLED SUCCESSFULLY.
-  echo
-else
-  echo FINISHED: dream_dmi is not installed on this system, nothing to do.
-  echo
-fi
+rm -f /usr/local/bin/dream_dmi
+rm -rf ~/.dream_dmi_tool
+echo FINISHED: dream_dmi was UNINSTALLED SUCCESSFULLY.
+echo

@@ -1,8 +1,10 @@
 .DS_Store
 .swp
-test/input/1*.txt
-test/input/2*.txt
-test/input/4*.txt
-test/input/5*.txt
-test/input/6*.txt
-test/reproduce_challenge.sh
+test/system_test/input/1*.txt
+test/system_test/input/2*.txt
+test/system_test/input/4*.txt
+test/system_test/input/5*.txt
+test/system_test/input/6*.txt
+test/benchmark/input/*10k.txt
+test/benchmark/input/*100k.txt
+containers/*/singularity/*.img

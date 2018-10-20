@@ -1,5 +1,5 @@
 # DreamDMI
-This repository holds the source code for **DreamDMI**, a Linux command-line tool for Disease Module Identification in molecular networks, leveraging the top performing methods of the **Disease Module Identification (DMI) DREAM Challenge** (https://www.synapse.org/modulechallenge)
+This repository holds the source code for **DreamDMI**, a Linux/macOS command-line tool for Disease Module Identification in molecular networks, leveraging the top performing methods of the **Disease Module Identification (DMI) DREAM Challenge** (https://www.synapse.org/modulechallenge)
 
 ## Methods
 * **K1**: Kernel clustering optimisation algorithm, https://www.synapse.org/#!Synapse:syn7349492/wiki/407359
@@ -15,7 +15,7 @@ Either ```docker``` or ```singularity``` must be installed. Please visit https:/
 
 Some of the Methods may require large amount of resources, depending on your input.
 
-The tool was tested on *Ubuntu Linux 18.04* and *CentOS Linux 7.5*.
+The tool was tested on *Ubuntu Linux 18.04*, *CentOS Linux 7.5* and *macOS Sierra* Version 10.12.
 
 
 ## INSTALLATION
@@ -35,6 +35,9 @@ nodeA and nodeB are of type *integer*, weight_AB is of type *float*.
 
 
 For an example, see the contents of test/input/.
+
+## BENCHMARKING
+see test/benchmarking
 
 ## PUBLICATION
 Open Community Challenge Reveals Molecular Network Modules with Key Roles in Diseases

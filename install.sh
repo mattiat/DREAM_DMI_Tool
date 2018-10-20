@@ -26,19 +26,20 @@ echo
 echo "Installing the DREAM_DMI TOOL"
 echo "Disease module identification algorithms"
 echo "top performers from the 2017 DREAM CHALLENGE"
+echo
 
 # check whether dream_dmi is already installed
-if grep -q dream_dmi_tool ~/.bashrc; then
+if [ -f /usr/local/bin/dream_dmi ]; then
   read -p "dream_dmi is already installed. Would you like to overwrite? [y|n] " -n 1 -r
   echo ""
   if [[ $REPLY =~ ^[y]$ ]]; then
     ./uninstall.sh > /dev/null 2>&1
   elif [[ $REPLY =~ ^[n]$ ]]; then
-    echo "EXITING: dream_dmi WAS NOT INSTALLED."
+    echo "EXITING: dream_dmi WAS NOT RE-INSTALLED."
     exit 0
   else
     echo "invalid option selected"
-    echo "EXITING: dream_dmi WAS NOT INSTALLED."
+    echo "EXITING: dream_dmi WAS NOT RE-INSTALLED."
     exit 0
   fi  
 fi
@@ -69,21 +70,17 @@ echo "  ...OK"
 
 # make dream_dmi command available
 echo "- Updating operating system..."
-if [[ $PATH != *"dream_dmi_tool"* ]]; then # if not already in path
-  echo export PATH=$PATH":~/.dream_dmi_tool" >> ~/.bashrc
-else
-  echo export PATH=$PATH >> ~/.bashrc
-fi
+ln -s ~/.dream_dmi_tool/dream_dmi /usr/local/bin/dream_dmi 
 echo "  ...OK"
 
-# (optionally) run a quick test
+# (optionally) test the installation
 echo ""
 read -p "Would you like to test the installation? (about 5 min) [y|n] " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[y]$ ]]
 then
 echo "- Testing, thank you for waiting... "
-  cd test && ./quick_test.sh > /dev/null 2>&1 && cd ..
+  cd test/system_test && ./quick_test.sh > /dev/null 2>&1 && cd ..
   if [ $? -gt "0" ]; then
     echo "  ERROR: see /tmp/dream_dmi_quick_test/console_output.txt"
     echo "" && echo "ABORTING: dream_dmi WAS NOT INSTALLED."
