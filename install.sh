@@ -64,7 +64,7 @@ fi
 # store dream_dmi code in the home directory
 echo "- Copying files..."
 mkdir ~/.dream_dmi_tool
-cp -r ../dream_dmi_tool/* ~/.dream_dmi_tool
+cp -r ./* ~/.dream_dmi_tool
 chmod -R 750 ~/.dream_dmi_tool
 echo "  ...OK"
 
