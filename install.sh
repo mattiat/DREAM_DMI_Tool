@@ -85,6 +85,8 @@ echo "- Testing, thank you for waiting... "
     echo "  ERROR: see /tmp/dream_dmi_quick_test/console_output.txt"
     echo "" && echo "ABORTING: dream_dmi WAS NOT INSTALLED."
     exit 1
+  else
+    echo "  ...OK"
   fi  
 fi
 
