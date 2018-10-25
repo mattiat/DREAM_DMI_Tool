@@ -6,5 +6,10 @@ test/system_test/input/4*.txt
 test/system_test/input/5*.txt
 test/system_test/input/6*.txt
 test/benchmark/input/*10k.txt
-test/benchmark/input/*100k.txt
+test/benchmark/input/*50k.txt
+test/benchmark/output_benchmark/
+test/system_test/output_reproduce_challenge/
 containers/*/singularity/*.img
+test/benchmark/src/*.dat
+test/benchmark/input/
+test/benchmark/output/

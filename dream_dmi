@@ -261,7 +261,7 @@ checkDockerBuildSuccess() {
   if ! grep -q "Successfully built" /tmp/docker_build_output; then
     echo "ERROR: docker build returned an error"
     echo "       - is an internet connection available?"
-    echo "       - is singularity running?"
+    echo "       - is the docker daemon running?"
     echo "see /tmp/docker_build_output for details"
     exit 1
   fi
@@ -271,7 +271,7 @@ checkSingularityBuildSuccess() {
   if ! grep -q "Finalizing Singularity container" /tmp/singularity_build_output; then
     echo "ERROR: singularity build returned an error"
     echo "       - is an internet connection available?"
-    echo "       - is the docker daemon running?"
+    echo "       - is singularity running?"
     echo "see /tmp/singularity_build_output for details"
     rm -f "$install_dir/containers/"$method"/singularity/"$method"-image.img"
     exit 1
@@ -281,13 +281,13 @@ checkSingularityBuildSuccess() {
 
 # take initial timestamp
 begin=$(date +%s)
-timestamp=`date '+%Y-%m-%d-%H:%M:%S'`
+timestamp=`date '+%Y-%m-%d-%H%M%S'`
 # increase stack memory limit
 default_ulimit=$(ulimit -s)
 if [ "$method" = "K1" ]; then
-  ulimit -s 32768
+  ulimit -s 32768 > /dev/null 2>&1
 else
-  ulimit -s 16384
+  ulimit -s 16384 > /dev/null 2>&1
 fi
 
 
