@@ -15,4 +15,3 @@ containers/*/singularity/*.img
 test/benchmark/src/*.dat
 test/benchmark/input/
 test/benchmark/output/
-test/benchmark/graphs/
