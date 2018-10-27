@@ -1,5 +1,7 @@
 .DS_Store
 .swp
+.pydevproject
+.project
 test/system_test/input/1*.txt
 test/system_test/input/2*.txt
 test/system_test/input/4*.txt

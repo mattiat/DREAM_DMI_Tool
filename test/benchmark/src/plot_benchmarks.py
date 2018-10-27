@@ -94,12 +94,12 @@ def run():
                         xsmooth = np.linspace(x.min(),x.max(),300)
                         f_avg = interpolate.interp1d(x_avg, y_avg, kind='cubic')
                         ysmooth_avg = f_avg(xsmooth)
-                        plt.plot(xsmooth, ysmooth_avg,color=color, label=label)
+                        plt.plot(xsmooth, ysmooth_avg,color=color) #label=label)
                         # plot confidence intervals
-                        y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
+                        y_lower = [min(y_01), min(y_02), min(y_03), min(y_04), min(y_05), min(y_06)] #y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
                         f_lower = interpolate.interp1d(x_avg, y_lower, kind='cubic')
                         ysmooth_lower = f_lower(xsmooth)
-                        y_upper = [ci_01[1],ci_02[1],ci_03[1],ci_04[1],ci_05[1],ci_06[1]]
+                        y_upper = [max(y_01), max(y_02), max(y_03), max(y_04), max(y_05), max(y_06)]#y_upper = [ci_01[1],ci_02[1],ci_03[1],ci_04[1],ci_05[1],ci_06[1]]
                         f_upper = interpolate.interp1d(x_avg, y_upper, kind='cubic')
                         ysmooth_upper = f_upper(xsmooth)
                         plt.fill_between(xsmooth, ysmooth_lower, ysmooth_upper, alpha=0.3, facecolor=color)
