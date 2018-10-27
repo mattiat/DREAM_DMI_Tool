@@ -33,10 +33,14 @@ import os
 from cProfile import label
 import numpy as np
 from scipy import interpolate
+import statsmodels.stats.api as sms
 
 def run():
+    grid1 = Grid().scores = pd.read_csv("../graphs/grid_run1_mac.tsv", sep='\t')
+    grid2 = Grid().scores = pd.read_csv("../graphs/grid_run1_rico.tsv", sep='\t')
     grid = Grid()
-    grid.scores = pd.read_csv("../graphs/grid.tsv", sep='\t')
+    grid.scores = pd.concat([grid1, grid2])
+    
     methods = ['R1', 'M1', 'K1']
     # Plot as in  ##################################################################################################
     for N in grid.N:
@@ -49,7 +53,14 @@ def run():
                 out_folder_beta = out_folder_t1 + '_beta' + str(beta) + '/'
                 os.system('rm -rf ' + out_folder_beta + ' && mkdir ' + out_folder_beta)
                 for k in grid.k:
-                    fig = plt.figure()
+                    fig = plt.figure(figsize=(5,5))
+                    ax = fig.add_subplot(111)
+                    ax.set_xlim([0.05,0.65])
+                    ax.set_ylim([0.75,1.02])
+                    title = 'N: ' + str(N) + ', γ: ' + str(t1) + ', β:' + str(beta) + ', k: ' + str(k)
+                    ax.set_title(title)
+                    ax.set_xlabel('μ')
+                    ax.set_ylabel('NMI')
                     for method in methods:
                         N_condition = (grid.scores['N'] == N)
                         t1_condition = (grid.scores['t1'] == t1)
@@ -57,34 +68,42 @@ def run():
                         method_condition = (grid.scores['METHOD'] == method)
                         k_condition = (grid.scores['k'] == k)
                         data = grid.scores[N_condition & t1_condition & beta_condition & method_condition & k_condition]
-                        if(method=='K1'): color='r'
-                        if(method=='M1'): color='g'
-                        if(method=='R1'): color='b'
-                        
+                        if(method=='K1'): color='r'; label='K1'
+                        if(method=='M1'): color='g'; label='M1'
+                        if(method=='R1'): color='b'; label='R1'
+                        # average over multiple runs
                         x = data['mut']
                         y = data['SCORE']
-                        f = interpolate.interp1d(x, y, kind='quadratic')
+                        mut_01_condition = (x == 0.1); y_01 = y[mut_01_condition]
+                        mut_02_condition = (x == 0.2); y_02 = y[mut_02_condition]
+                        mut_03_condition = (x == 0.3); y_03 = y[mut_03_condition]
+                        mut_04_condition = (x == 0.4); y_04 = y[mut_04_condition]
+                        mut_05_condition = (x == 0.5); y_05 = y[mut_05_condition]
+                        mut_06_condition = (x == 0.6); y_06 = y[mut_06_condition]
+                        ci_01 = sms.DescrStatsW(y_01).tconfint_mean()
+                        ci_02 = sms.DescrStatsW(y_02).tconfint_mean()
+                        ci_03 = sms.DescrStatsW(y_03).tconfint_mean()
+                        ci_04 = sms.DescrStatsW(y_04).tconfint_mean()
+                        ci_05 = sms.DescrStatsW(y_05).tconfint_mean()
+                        ci_06 = sms.DescrStatsW(y_06).tconfint_mean()
+                        # plot average as points
+                        y_avg = [np.mean(ci_01), np.mean(ci_02), np.mean(ci_03), np.mean(ci_04), np.mean(ci_05), np.mean(ci_06)]
+                        x_avg = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+                        plt.scatter(x_avg, y_avg, color=color, label=label)
+                        # plot average as a smooth curve
                         xsmooth = np.linspace(x.min(),x.max(),300)
-                        ysmooth = f(xsmooth)
-                        plt.plot(x,y, color+'o')
-                        plt.plot(xsmooth, ysmooth, color, label='cacca')
-                        
-                        # PROVA COSI https://stackoverflow.com/questions/19125722/adding-a-legend-to-pyplot-in-matplotlib-in-the-most-simple-manner-possible
-                        #fig = plt.figure(figsize=(10,5))
-                        #ax = fig.add_subplot(111)
-                        #ax.set_title('ADR vs Rating (CS:GO)')
-                        #ax.scatter(x=data[:,0],y=data[:,1],label='Data')
-                        #plt.plot(data[:,0], data[:,0],color='red',label='Our Fitting Line')
-                        #ax.set_xlabel('ADR')
-                        #ax.set_ylabel('Rating')
-                        #ax.legend(loc='best')
-                        #plt.show()
-                        ####################################################
-                        
-                    title = 'N: ' + str(N) + ', γ: ' + str(t1) + ', β:' + str(beta) + ', k: ' + str(k)
-                    fig.suptitle(title , fontsize=20)
-                    plt.xlabel('μ', fontsize=18)
-                    plt.ylabel('NMI', fontsize=16)
+                        f_avg = interpolate.interp1d(x_avg, y_avg, kind='cubic')
+                        ysmooth_avg = f_avg(xsmooth)
+                        plt.plot(xsmooth, ysmooth_avg,color=color, label=label)
+                        # plot confidence intervals
+                        y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
+                        f_lower = interpolate.interp1d(x_avg, y_lower, kind='cubic')
+                        ysmooth_lower = f_lower(xsmooth)
+                        y_upper = [ci_01[1],ci_02[1],ci_03[1],ci_04[1],ci_05[1],ci_06[1]]
+                        f_upper = interpolate.interp1d(x_avg, y_upper, kind='cubic')
+                        ysmooth_upper = f_upper(xsmooth)
+                        plt.fill_between(xsmooth, ysmooth_lower, ysmooth_upper, alpha=0.3, facecolor=color)
+                    ax.legend(loc='best')
                     fig.savefig(out_folder_beta + 'k_' + str(k) + '.png')
                     plt.close()
 

@@ -22,5 +22,8 @@
 # https://www.synapse.org/modulechallenge
 ###############################################################################
 
+rm -rf input/ && mkdir input/
+rm -rf output/ && mkdir output/
+
 cd ./src
 python3 generate_benchnmarks.py

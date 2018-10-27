@@ -35,7 +35,7 @@ import os
     
 def score_benchmark(benchmark_network, benchmark_solution, numb_nodes):
     def import_dream_dmi_output(file, numb_nodes):
-        communities = [None] * (numb_nodes + 1)
+        communities = [-1] * (numb_nodes + 1)
         with open(file, newline='') as f:    
             for community in list(csv.reader(f, delimiter='\t')):
                 community_label = int(community.pop(0)) # extract first element as label
@@ -43,9 +43,10 @@ def score_benchmark(benchmark_network, benchmark_solution, numb_nodes):
                 for node in community:
                     communities[int(node)] = community_label
         communities.pop(0) # discard first element: it is always None
-        imported_nodes = sum(x is not None for x in communities)
+        imported_nodes = sum(x != -1 for x in communities)
         if(imported_nodes != numb_nodes):
-            raise Exception("Benchmark nodes are missing from dream_dmi output")
+            diff = str(imported_nodes - numb_nodes)
+            print('WARING: ' + diff + 'nodes were not assigned to any community\n' + file)
         return communities
     def import_solution(file):
         solution = pd.read_csv(file, sep='\t', header=None)
@@ -81,29 +82,9 @@ def run():
                         params_label = params.replace(' ', '_').replace('-', '')
                         benchmark_output= '../output/' + params_label + '/'
                         for method in methods:
-                            
-                            #benchmark_network = glob.glob(benchmark_output + '*' + method + '*result*.txt')[0]
-                            #benchmark_solution = '../input/' + params_label + '/solution.txt'
-                            #score = score_benchmark(benchmark_network, benchmark_solution, N)
-                            if((k==15) & (mut<0.41) & (method=='K1')): score = score - 0.1
-                            if((k==20) & (mut<0.41) & (method=='K1')): score = score - 0.15
-                            if((k==25) & (mut<0.41) & (method=='K1')): score = score - 0.19
-                            if((k==15) & (mut>0.41) & (method=='K1')): score = score - 0.14
-                            if((k==20) & (mut>0.41) & (method=='K1')): score = score - 0.19
-                            if((k==25) & (mut>0.41) & (method=='K1')): score = score - 0.31
-                            if((k==15) & (mut<0.41) & (method=='M1')): score = score - 0.1
-                            if((k==20) & (mut<0.41) & (method=='M1')): score = score - 0.16
-                            if((k==25) & (mut<0.41) & (method=='M1')): score = score - 0.21
-                            if((k==15) & (mut>0.41) & (method=='M1')): score = score - 0.15
-                            if((k==20) & (mut>0.41) & (method=='M1')): score = score - 0.22
-                            if((k==25) & (mut>0.41) & (method=='M1')): score = score - 0.36
-                            if((k==15) & (mut<0.41) & (method=='R1')): score = score - 0.1
-                            if((k==20) & (mut<0.41) & (method=='R1')): score = score - 0.19
-                            if((k==25) & (mut<0.41) & (method=='R1')): score = score - 0.23
-                            if((k==15) & (mut>0.41) & (method=='R1')): score = score - 0.15
-                            if((k==20) & (mut>0.41) & (method=='R1')): score = score - 0.21
-                            if((k==25) & (mut>0.41) & (method=='R1')): score = score - 0.34
-                            
+                            benchmark_network = glob.glob(benchmark_output + '*' + method + '*result*.txt')[0]
+                            benchmark_solution = '../input/' + params_label + '/solution.txt'
+                            score = score_benchmark(benchmark_network, benchmark_solution, N)
                             next_score = len(grid.scores)
                             grid.scores.loc[next_score]=[N, k, mut, beta, t1, method, score]
     
