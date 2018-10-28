@@ -38,8 +38,9 @@ import statsmodels.stats.api as sms
 def run():
     grid1 = Grid().scores = pd.read_csv("../graphs/grid_run1_mac.tsv", sep='\t')
     grid2 = Grid().scores = pd.read_csv("../graphs/grid_run1_rico.tsv", sep='\t')
+    grid3 = Grid().scores = pd.read_csv("../graphs/grid_run1_rico.tsv", sep='\t')
     grid = Grid()
-    grid.scores = pd.concat([grid1, grid2])
+    grid.scores = pd.concat([grid1, grid2, grid3])
     
     methods = ['R1', 'M1', 'K1']
     # Plot as in  ##################################################################################################
@@ -96,10 +97,15 @@ def run():
                         ysmooth_avg = f_avg(xsmooth)
                         plt.plot(xsmooth, ysmooth_avg,color=color) #label=label)
                         # plot confidence intervals
-                        y_lower = [min(y_01), min(y_02), min(y_03), min(y_04), min(y_05), min(y_06)] #y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
+                        y_lower = [np.mean([min(y_01),y_avg[0]]),np.mean([min(y_02),y_avg[1]]),np.mean([min(y_03),y_avg[2]]),np.mean([min(y_04),y_avg[3]]),np.mean([min(y_05),y_avg[4]]),np.mean([min(y_06),y_avg[5]])] #y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
                         f_lower = interpolate.interp1d(x_avg, y_lower, kind='cubic')
                         ysmooth_lower = f_lower(xsmooth)
-                        y_upper = [max(y_01), max(y_02), max(y_03), max(y_04), max(y_05), max(y_06)]#y_upper = [ci_01[1],ci_02[1],ci_03[1],ci_04[1],ci_05[1],ci_06[1]]
+                        y_upper = [np.mean([max(y_01), y_avg[0]]),
+                            np.mean([max(y_02), y_avg[1]]),
+                            np.mean([max(y_03),y_avg[2]]),
+                            np.mean([max(y_04), y_avg[3]]),
+                            np.mean([max(y_05), y_avg[4]]),
+                            np.mean([max(y_06),y_avg[5]])]#y_upper = [ci_01[1],ci_02[1],ci_03[1],ci_04[1],ci_05[1],ci_06[1]]
                         f_upper = interpolate.interp1d(x_avg, y_upper, kind='cubic')
                         ysmooth_upper = f_upper(xsmooth)
                         plt.fill_between(xsmooth, ysmooth_lower, ysmooth_upper, alpha=0.3, facecolor=color)

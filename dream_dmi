@@ -337,12 +337,12 @@ then
    "$output"/"$timestamp"__"$method"__console-output__"$network_name" 2>&1
 fi
 
-end=$(date +%s) # calculate execution time
-tottime=$(expr $end - $begin)
 ulimit -s $default_ulimit
 
+end=$(date +%s) # calculate execution time
+tottime=$(expr $end - $begin)
 echo "" && echo "Exectution took $tottime seconds"
-
+echo "time\tmemory\n$tottime\t1000" > "$output"/"$timestamp"__"$method"__run-statistics__"$network_name" 
 
 # PREPARE OUTPUT AND CLEAN UP TEMP FILES ##########################################################
 
