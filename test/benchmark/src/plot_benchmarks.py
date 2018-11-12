@@ -38,7 +38,8 @@ import statsmodels.stats.api as sms
 def run():
     grid1 = Grid().scores = pd.read_csv("../graphs/grid_run1_mac.tsv", sep='\t')
     grid2 = Grid().scores = pd.read_csv("../graphs/grid_run1_rico.tsv", sep='\t')
-    grid3 = Grid().scores = pd.read_csv("../graphs/grid_run1_rico.tsv", sep='\t')
+    grid3 = Grid().scores = pd.read_csv("../graphs/grid_run2_rico.tsv", sep='\t')
+    grid4 = Grid().scores = pd.read_csv("../graphs/grid_run3_rico.tsv", sep='\t')
     grid = Grid()
     grid.scores = pd.concat([grid1, grid2, grid3])
     
@@ -56,8 +57,12 @@ def run():
                 for k in grid.k:
                     fig = plt.figure(figsize=(5,5))
                     ax = fig.add_subplot(111)
-                    ax.set_xlim([0.05,0.65])
-                    ax.set_ylim([0.75,1.02])
+                    if N==5000:
+                        ax.set_xlim([0.05,0.65])
+                        ax.set_ylim([0.95,1.002])
+                    else:
+                        ax.set_xlim([0.05,0.65])
+                        ax.set_ylim([0.75,1.02])
                     title = 'N: ' + str(N) + ', γ: ' + str(t1) + ', β:' + str(beta) + ', k: ' + str(k)
                     ax.set_title(title)
                     ax.set_xlabel('μ')
