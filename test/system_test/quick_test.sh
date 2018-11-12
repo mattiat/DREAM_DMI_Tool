@@ -35,7 +35,7 @@ checkOutput() {
   # check the output file contains the success message
   if ! grep -r -q "Output is written to file" $output; then
     echo "Test failed"
-    echo see $output/console_output.txt for details
+    echo see "$output"console_output.txt for details
     exit 1
   else
     echo "Test succeeded"
@@ -43,18 +43,19 @@ checkOutput() {
   fi
 }
 
-#if Singularity is installed
-singularity --help > /tmp/singularity_test 2>&1
-if [ $? -eq "0" ]; then
-  dream_dmi --input=./input/3_signal_anonym_directed_v3.txt --output=$output --method=R1 --container=singularity \
-    --b=1.7 --c=400 --i=2 --filter=quantile --threshold=1 --post=discard --smallest=3 --largest=100 --b2=1.7 --c2=500 --i2=2 \
-    > $output/console_output.txt 2>&1
-  checkOutput
-fi
 # if Docker is installed
 docker --help > /tmp/docker_test 2>&1
 if [ $? -eq "0" ]; then 
   dream_dmi --input=./input/3_signal_anonym_directed_v3.txt --output=$output --method=R1 --container=docker \
+    --b=1.7 --c=400 --i=2 --filter=quantile --threshold=1 --post=discard --smallest=3 --largest=100 --b2=1.7 --c2=500 --i2=2 \
+    > $output/console_output.txt 2>&1
+  checkOutput
+fi
+
+#if Singularity is installed
+singularity --help > /tmp/singularity_test 2>&1
+if [ $? -eq "0" ]; then
+  dream_dmi --input=./input/3_signal_anonym_directed_v3.txt --output=$output --method=R1 --container=singularity \
     --b=1.7 --c=400 --i=2 --filter=quantile --threshold=1 --post=discard --smallest=3 --largest=100 --b2=1.7 --c2=500 --i2=2 \
     > $output/console_output.txt 2>&1
   checkOutput

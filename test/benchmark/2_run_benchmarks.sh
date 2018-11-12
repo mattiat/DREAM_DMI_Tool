@@ -1,4 +1,4 @@
-#! /bin/sh -
+#! /bin/bash -
 # Copyright 2018 Bergmann's Lab UNIL <mattia.tomasoni@unil.ch> 
 #
 # This file is part of DREAM DMI Tool.
@@ -21,13 +21,73 @@
 # 2017 DREAM challenge on Disease Module Identification
 # https://www.synapse.org/modulechallenge
 ###############################################################################
+
+
+# clean results from previous runs
+monitor_ram_script=$PWD/src/monitor_ram.sh
+chmod +x $monitor_ram_script
+stats_output="$PWD/output/__resource_usage/"
+rm -rf $stats_output && mkdir $stats_output
+stats_output_file="$stats_output"benchmark_resource_usage.tsv
+printf "method\ttime\tmax_RAM\tmean_RAM\n" >> $stats_output_file
+
+
+start_resource_monitor () {
+  ram_output="/tmp/dream_dmi_benchmark_test/"
+  rm -rf $ram_output && mkdir $ram_output
+  # take initial timestamp
+  begin=$(date +%s)
+  timestamp=`date '+%Y-%m-%d-%H%M%S'`
+  # start monitoring RAM
+  screen -dmS measureRAM sh -c "$monitor_ram_script > "$ram_output"ramusage.tsv"
+}
+stop_resource_monitor () {
+  method=$1
+  printf "$method\t" >> $stats_output_file
+  # calculate time usage
+  end=$(date +%s) # calculate execution time
+  tottime=$(expr $end - $begin)
+  printf "$tottime\t" >> $stats_output_file
+  # calculate RAM usage
+  screen -S measureRAM -X quit # kill RAM monitoring script
+  base_RAM=$( cat "$ram_output"ramusage.tsv | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print min}')
+  max_RAM=$( cat "$ram_output"ramusage.tsv | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print max}')
+  max_RAM=$(($max_RAM-$base_RAM))
+  mean_RAM=$( cat "$ram_output"ramusage.tsv | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print total/count}')
+  mean_RAM=${mean_RAM%.*}
+  mean_RAM=$(($mean_RAM-$base_RAM))
+  printf "$max_RAM\t$mean_RAM\n" >> $stats_output_file
+}
+
+
 cd input
 base=$(pwd)
+
 for dir in */; do
   cd $dir
   chmod +x *.sh
+
+  start_resource_monitor
   ./run_dream_dmi_R1.sh
+  stop_resource_monitor "R1"
+
+  start_resource_monitor
   ./run_dream_dmi_M1.sh
+  stop_resource_monitor "M1"
+
+  start_resource_monitor
   ./run_dream_dmi_K1.sh
+  stop_resource_monitor "K1"
+
   cd $base
+  
 done
+
+
+
+./2_run_benchmarks.sh: line 45: ./output/__resource_usage/benchmark_resource_usage.tsv: No such file or directory
+./2_run_benchmarks.sh: line 49: ./output/__resource_usage/benchmark_resource_usage.tsv: No such file or directory
+No screen session found.
+awk: division by zero
+ source line number 1
+./2_run_benchmarks.sh: line 54: ./output/__resource_usage/benchmark_resource_usage.tsv: No such file or directory

@@ -82,9 +82,12 @@ def run():
                         params_label = params.replace(' ', '_').replace('-', '')
                         benchmark_output= '../output/' + params_label + '/'
                         for method in methods:
-                            benchmark_network = glob.glob(benchmark_output + '*' + method + '*result*.txt')[0]
-                            benchmark_solution = '../input/' + params_label + '/solution.txt'
-                            score = score_benchmark(benchmark_network, benchmark_solution, N)
+                            try:
+                                benchmark_network = glob.glob(benchmark_output + '*' + method + '*result*.txt')[0]
+                                benchmark_solution = '../input/' + params_label + '/solution.txt'
+                                score = score_benchmark(benchmark_network, benchmark_solution, N)
+                            except Exception as e:
+                                score = -1
                             next_score = len(grid.scores)
                             grid.scores.loc[next_score]=[N, k, mut, beta, t1, method, score]
     
