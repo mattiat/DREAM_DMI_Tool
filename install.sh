@@ -28,6 +28,12 @@ echo "Disease module identification algorithms"
 echo "top performers from the 2017 DREAM CHALLENGE"
 echo
 
+# ask for root password (needed to make dream_dmi command available from all
+# locations by adding link in /usr/local/bin/dream_dmi)
+echo "Superuser rights are required."
+sudo ls > /dev/null
+echo
+
 # check whether dream_dmi is already installed
 if [ -f /usr/local/bin/dream_dmi ]; then
   read -p "dream_dmi is already installed. Would you like to overwrite? [y|n] " -n 1 -r
