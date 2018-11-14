@@ -82,12 +82,3 @@ for dir in */; do
   cd $base
   
 done
-
-
-
-./2_run_benchmarks.sh: line 45: ./output/__resource_usage/benchmark_resource_usage.tsv: No such file or directory
-./2_run_benchmarks.sh: line 49: ./output/__resource_usage/benchmark_resource_usage.tsv: No such file or directory
-No screen session found.
-awk: division by zero
- source line number 1
-./2_run_benchmarks.sh: line 54: ./output/__resource_usage/benchmark_resource_usage.tsv: No such file or directory

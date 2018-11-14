@@ -22,6 +22,13 @@
 # https://www.synapse.org/modulechallenge
 ###############################################################################
 
+# compile tool to build benchmark networks
+base=$PWD
+cd src/weighted_directed_nets
+make
+cd $base
+
+# clean previous runs
 rm -rf input/ && mkdir input/
 rm -rf output/ && mkdir output/
 
