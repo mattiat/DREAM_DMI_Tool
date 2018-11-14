@@ -81,7 +81,7 @@ echo "  ...OK"
 
 # (optionally) test the installation
 echo ""
-read -p "Would you like to test the installation? (about 5 min) [y|n] " -n 1 -r
+read -p "Would you like to test the installation? (take a few mins) [y|n] " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[y]$ ]]
 then
