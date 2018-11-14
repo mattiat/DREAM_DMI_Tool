@@ -76,7 +76,7 @@ echo "  ...OK"
 
 # make dream_dmi command available
 echo "- Updating operating system..."
-ln -s ~/.dream_dmi_tool/dream_dmi /usr/local/bin/dream_dmi 
+sudo ln -s ~/.dream_dmi_tool/dream_dmi /usr/local/bin/dream_dmi 
 echo "  ...OK"
 
 # (optionally) test the installation
