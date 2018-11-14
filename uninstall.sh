@@ -24,8 +24,15 @@
 
 echo
 echo "Uninstalling the DREAM_DMI TOOL"
+echo 
 
-rm -f /usr/local/bin/dream_dmi
+# ask for root password (needed to remove /usr/local/bin/dream_dmi)
+echo "Superuser rights are required."
+sudo ls > /dev/null
+echo
+
+
+sudo rm -f /usr/local/bin/dream_dmi
 rm -rf ~/.dream_dmi_tool
 echo FINISHED: dream_dmi was UNINSTALLED SUCCESSFULLY.
 echo
