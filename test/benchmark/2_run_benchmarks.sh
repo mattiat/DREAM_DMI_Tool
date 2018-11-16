@@ -71,13 +71,22 @@ for dir in */; do
   ./run_dream_dmi_R1.sh
   stop_resource_monitor "R1"
 
+  sleep 10
+  find  ~/.dream_dmi_tool -name "core.*" -delete # clean any core dumps
+
   start_resource_monitor
   ./run_dream_dmi_M1.sh
   stop_resource_monitor "M1"
 
+  sleep 10
+  find  ~/.dream_dmi_tool -name "core.*" -delete 
+
   start_resource_monitor
   ./run_dream_dmi_K1.sh
   stop_resource_monitor "K1"
+
+  sleep 10
+  find  ~/.dream_dmi_tool -name "core.*" -delete 
 
   cd $base
   
