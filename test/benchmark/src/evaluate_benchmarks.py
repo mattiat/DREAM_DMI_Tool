@@ -30,7 +30,7 @@ import glob
 import sklearn.metrics.cluster.supervised as sc
 import pandas as pd
 import csv
-from src.generate_benchnmarks import Grid
+from generate_benchnmarks import Grid
 import os
     
 def score_benchmark(benchmark_network, benchmark_solution, numb_nodes):
