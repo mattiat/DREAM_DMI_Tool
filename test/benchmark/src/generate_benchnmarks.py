@@ -30,7 +30,7 @@ import pandas as pd
 import os
     
 class Grid(object):
-    N = [1000, 5000, 10000]
+    N = [1000, 5000, 8000]
     k =[15, 20, 25]
     mut = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     beta = [1, 2]

@@ -36,12 +36,13 @@ from scipy import interpolate
 import statsmodels.stats.api as sms
 
 def run():
-    grid1 = Grid().scores = pd.read_csv("../graphs/grid_run1_mac.tsv", sep='\t')
-    grid2 = Grid().scores = pd.read_csv("../graphs/grid_run1_rico.tsv", sep='\t')
-    grid3 = Grid().scores = pd.read_csv("../graphs/grid_run2_rico.tsv", sep='\t')
-    grid4 = Grid().scores = pd.read_csv("../graphs/grid_run3_rico.tsv", sep='\t')
+    grid_run1_mac = Grid().scores = pd.read_csv("../graphs/grid_run1_mac.tsv", sep='\t')
+    grid_run1_rico = Grid().scores = pd.read_csv("../graphs/grid_run1_rico.tsv", sep='\t')
+    grid_run2_rico = Grid().scores = pd.read_csv("../graphs/grid_run2_rico.tsv", sep='\t')
+    grid_run3_rico = Grid().scores = pd.read_csv("../graphs/grid_run3_rico.tsv", sep='\t')
+    grid_run4_rico = Grid().scores = pd.read_csv("../graphs/grid_run4_rico.tsv", sep='\t')
     grid = Grid()
-    grid.scores = pd.concat([grid1, grid2, grid3])
+    grid.scores = pd.concat([grid_run1_mac, grid_run1_rico, grid_run2_rico, grid_run3_rico, grid_run4_rico])
     
     methods = ['R1', 'M1', 'K1']
     # Plot as in  ##################################################################################################
@@ -102,7 +103,13 @@ def run():
                         ysmooth_avg = f_avg(xsmooth)
                         plt.plot(xsmooth, ysmooth_avg,color=color) #label=label)
                         # plot confidence intervals
-                        y_lower = [np.mean([min(y_01),y_avg[0]]),np.mean([min(y_02),y_avg[1]]),np.mean([min(y_03),y_avg[2]]),np.mean([min(y_04),y_avg[3]]),np.mean([min(y_05),y_avg[4]]),np.mean([min(y_06),y_avg[5]])] #y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
+                        y_lower = [
+                            np.mean([min(y_01),y_avg[0]]),
+                            np.mean([min(y_02),y_avg[1]]),
+                            np.mean([min(y_03),y_avg[2]]),
+                            np.mean([min(y_04),y_avg[3]]),
+                            np.mean([min(y_05),y_avg[4]]),
+                            np.mean([min(y_06),y_avg[5]])] #y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
                         f_lower = interpolate.interp1d(x_avg, y_lower, kind='cubic')
                         ysmooth_lower = f_lower(xsmooth)
                         y_upper = [np.mean([max(y_01), y_avg[0]]),
@@ -119,6 +126,6 @@ def run():
                     plt.close()
 
 if __name__ == '__main__':
-    print("\n---------------------------EVALUATING DreamDMI BENCHMARKS-------------------------\n")
+    print("\n---------------------------PLOTTING DreamDMI BENCHMARKS-------------------------\n")
     run()
-    print("\n-------------------------DONE EVALUATING DreamDMI BENCHMARKS-----------------------\n")
+    print("\n-------------------------DONE PLOTTING DreamDMI BENCHMARKS-----------------------\n")
