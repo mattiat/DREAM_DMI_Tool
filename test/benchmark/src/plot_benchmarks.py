@@ -36,13 +36,11 @@ from scipy import interpolate
 import statsmodels.stats.api as sms
 
 def run():
-    grid_run1_mac = Grid().scores = pd.read_csv("../graphs/grid_run1_mac.tsv", sep='\t')
-    grid_run1_rico = Grid().scores = pd.read_csv("../graphs/grid_run1_rico.tsv", sep='\t')
-    grid_run2_rico = Grid().scores = pd.read_csv("../graphs/grid_run2_rico.tsv", sep='\t')
-    grid_run3_rico = Grid().scores = pd.read_csv("../graphs/grid_run3_rico.tsv", sep='\t')
-    grid_run4_rico = Grid().scores = pd.read_csv("../graphs/grid_run4_rico.tsv", sep='\t')
+    grid1 = Grid().scores = pd.read_csv("../graphs/grid.tsv", sep='\t')
+    grid2 = Grid().scores = pd.read_csv("../graphs/grid.tsv", sep='\t')
+
     grid = Grid()
-    grid.scores = pd.concat([grid_run1_mac, grid_run1_rico, grid_run2_rico, grid_run3_rico, grid_run4_rico])
+    grid.scores = pd.concat([grid1, grid2])
     
     methods = ['R1', 'M1', 'K1']
     # Plot as in  ##################################################################################################
@@ -58,12 +56,14 @@ def run():
                 for k in grid.k:
                     fig = plt.figure(figsize=(5,5))
                     ax = fig.add_subplot(111)
+                    '''
                     if N==5000:
                         ax.set_xlim([0.05,0.65])
                         ax.set_ylim([0.95,1.002])
                     else:
                         ax.set_xlim([0.05,0.65])
                         ax.set_ylim([0.75,1.02])
+                    '''
                     title = 'N: ' + str(N) + ', γ: ' + str(t1) + ', β:' + str(beta) + ', k: ' + str(k)
                     ax.set_title(title)
                     ax.set_xlabel('μ')
@@ -97,19 +97,14 @@ def run():
                         y_avg = [np.mean(ci_01), np.mean(ci_02), np.mean(ci_03), np.mean(ci_04), np.mean(ci_05), np.mean(ci_06)]
                         x_avg = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
                         plt.scatter(x_avg, y_avg, color=color, label=label)
+                        '''
                         # plot average as a smooth curve
                         xsmooth = np.linspace(x.min(),x.max(),300)
                         f_avg = interpolate.interp1d(x_avg, y_avg, kind='cubic')
                         ysmooth_avg = f_avg(xsmooth)
                         plt.plot(xsmooth, ysmooth_avg,color=color) #label=label)
                         # plot confidence intervals
-                        y_lower = [
-                            np.mean([min(y_01),y_avg[0]]),
-                            np.mean([min(y_02),y_avg[1]]),
-                            np.mean([min(y_03),y_avg[2]]),
-                            np.mean([min(y_04),y_avg[3]]),
-                            np.mean([min(y_05),y_avg[4]]),
-                            np.mean([min(y_06),y_avg[5]])] #y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
+                        y_lower = [np.mean([min(y_01),y_avg[0]]),np.mean([min(y_02),y_avg[1]]),np.mean([min(y_03),y_avg[2]]),np.mean([min(y_04),y_avg[3]]),np.mean([min(y_05),y_avg[4]]),np.mean([min(y_06),y_avg[5]])] #y_lower = [ci_01[0],ci_02[0],ci_03[0],ci_04[0],ci_05[0],ci_06[0]]
                         f_lower = interpolate.interp1d(x_avg, y_lower, kind='cubic')
                         ysmooth_lower = f_lower(xsmooth)
                         y_upper = [np.mean([max(y_01), y_avg[0]]),
@@ -120,12 +115,13 @@ def run():
                             np.mean([max(y_06),y_avg[5]])]#y_upper = [ci_01[1],ci_02[1],ci_03[1],ci_04[1],ci_05[1],ci_06[1]]
                         f_upper = interpolate.interp1d(x_avg, y_upper, kind='cubic')
                         ysmooth_upper = f_upper(xsmooth)
-                        plt.fill_between(xsmooth, ysmooth_lower, ysmooth_upper, alpha=0.3, facecolor=color)
+                        plt.fill_between(xsmooth, ysmooth_lower, ysmooth_upper, alpha=0.3, facecolor=color'
+                        '''
                     ax.legend(loc='best')
                     fig.savefig(out_folder_beta + 'k_' + str(k) + '.png')
                     plt.close()
 
 if __name__ == '__main__':
-    print("\n---------------------------PLOTTING DreamDMI BENCHMARKS-------------------------\n")
+    print("\n---------------------------EVALUATING DreamDMI BENCHMARKS-------------------------\n")
     run()
-    print("\n-------------------------DONE PLOTTING DreamDMI BENCHMARKS-----------------------\n")
+    print("\n-------------------------DONE EVALUATING DreamDMI BENCHMARKS-----------------------\n")
