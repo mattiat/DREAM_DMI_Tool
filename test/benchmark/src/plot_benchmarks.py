@@ -98,7 +98,7 @@ def run():
                         # plot average as points
                         y_avg = [np.mean(ci_01), np.mean(ci_02), np.mean(ci_03), np.mean(ci_04), np.mean(ci_05), np.mean(ci_06)]
                         x_avg = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
-                        plt.scatter(x_avg, y_avg, color=color, label=label, alpha=0.5, marker=marker)
+                        plt.scatter(x_avg, y_avg, color=color, label=label, marker=marker)
                         '''
                         # plot average as a smooth curve
                         xsmooth = np.linspace(x.min(),x.max(),300)
