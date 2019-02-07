@@ -56,6 +56,8 @@ def run():
                 for k in grid.k:
                     fig = plt.figure(figsize=(5,5))
                     ax = fig.add_subplot(111)
+                    ax.set_xlim([0,0.65])
+                    ax.set_ylim([-0.05,1.05])
                     '''
                     if N==5000:
                         ax.set_xlim([0.05,0.65])
@@ -75,9 +77,9 @@ def run():
                         method_condition = (grid.scores['METHOD'] == method)
                         k_condition = (grid.scores['k'] == k)
                         data = grid.scores[N_condition & t1_condition & beta_condition & method_condition & k_condition]
-                        if(method=='K1'): color='r'; label='K1'
-                        if(method=='M1'): color='g'; label='M1'
-                        if(method=='R1'): color='b'; label='R1'
+                        if(method=='K1'): color='r'; label='K1'; marker='^'; 
+                        if(method=='M1'): color='g'; label='M1'; marker='<';
+                        if(method=='R1'): color='b'; label='R1'; marker='>';
                         # average over multiple runs
                         x = data['mut']
                         y = data['SCORE']
@@ -96,7 +98,7 @@ def run():
                         # plot average as points
                         y_avg = [np.mean(ci_01), np.mean(ci_02), np.mean(ci_03), np.mean(ci_04), np.mean(ci_05), np.mean(ci_06)]
                         x_avg = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
-                        plt.scatter(x_avg, y_avg, color=color, label=label)
+                        plt.scatter(x_avg, y_avg, color=color, label=label, alpha=0.5, marker=marker)
                         '''
                         # plot average as a smooth curve
                         xsmooth = np.linspace(x.min(),x.max(),300)
@@ -122,6 +124,6 @@ def run():
                     plt.close()
 
 if __name__ == '__main__':
-    print("\n---------------------------EVALUATING DreamDMI BENCHMARKS-------------------------\n")
+    print("\n---------------------------PLOTTING DreamDMI BENCHMARKS-------------------------\n")
     run()
-    print("\n-------------------------DONE EVALUATING DreamDMI BENCHMARKS-----------------------\n")
+    print("\n-------------------------DONE PLOTTING DreamDMI BENCHMARKS-----------------------\n")
