@@ -54,7 +54,9 @@ def run():
                 out_folder_beta = out_folder_t1 + '_beta' + str(beta) + '/'
                 os.system('rm -rf ' + out_folder_beta + ' && mkdir ' + out_folder_beta)
                 for k in grid.k:
-                    fig = plt.figure(figsize=(5,5))
+                    #fig = plt.figure(figsize=(5,5))
+                    my_dpi=300
+                    fig = plt.figure(figsize=(4, 4))
                     ax = fig.add_subplot(111)
                     ax.set_xlim([0,0.65])
                     ax.set_ylim([-0.05,1.05])
@@ -120,7 +122,7 @@ def run():
                         plt.fill_between(xsmooth, ysmooth_lower, ysmooth_upper, alpha=0.3, facecolor=color'
                         '''
                     ax.legend(loc='best')
-                    fig.savefig(out_folder_beta + 'k_' + str(k) + '.png')
+                    fig.savefig(out_folder_beta + 'k_' + str(k) + '.png', dpi=my_dpi)
                     plt.close()
 
 if __name__ == '__main__':
