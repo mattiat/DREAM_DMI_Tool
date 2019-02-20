@@ -36,14 +36,146 @@ from scipy import interpolate
 import statsmodels.stats.api as sms
 
 def run():
-    grid1 = Grid().scores = pd.read_csv("../graphs/grid.tsv", sep='\t')
-    grid2 = Grid().scores = pd.read_csv("../graphs/grid.tsv", sep='\t')
+    grid5 = Grid().scores = pd.read_csv("../graphs/grid5.tsv", sep='\t')
+    grid6 = Grid().scores = pd.read_csv("../graphs/grid6.tsv", sep='\t')
+    grid6b = Grid().scores = pd.read_csv("../graphs/grid6.tsv", sep='\t') # "6" is the only 8k experiment
+    grid7 = Grid().scores = pd.read_csv("../graphs/grid7.tsv", sep='\t')
+    grid7b = Grid().scores = pd.read_csv("../graphs/grid7.tsv", sep='\t') # only 10k
+    grid8 = Grid().scores = pd.read_csv("../graphs/grid8.tsv", sep='\t')
+    grid9 = Grid().scores = pd.read_csv("../graphs/grid9.tsv", sep='\t')
+    grid10 = Grid().scores = pd.read_csv("../graphs/grid10.tsv", sep='\t')
+    grid10b = Grid().scores = pd.read_csv("../graphs/grid10.tsv", sep='\t') # only 300
+    grid11 = Grid().scores = pd.read_csv("../graphs/grid11.tsv", sep='\t')
+    grid12 = Grid().scores = pd.read_csv("../graphs/grid12.tsv", sep='\t')
+    grid12b = Grid().scores = pd.read_csv("../graphs/grid12.tsv", sep='\t')
+
 
     grid = Grid()
-    grid.scores = pd.concat([grid1, grid2])
-    
-    methods = ['R1', 'M1', 'K1']
-    # Plot as in  ##################################################################################################
+    grid.scores = pd.concat([
+        grid5, 
+        grid6,
+        grid6b,
+        grid7,
+        grid7b,
+        grid8,
+        grid9,
+        grid10,
+        grid10b,
+        grid11,
+        grid12,
+        grid12b])
+
+    methods = ['R1', 'M1', 'K1', 'louvain']
+
+    ###################################################################################################################
+    # SUMMARY PLOT NMI X mu  ##########################################################################################
+    ###################################################################################################################
+    out_folder = '../graphs/'
+    my_dpi = 300
+    fig = plt.figure(figsize=(4, 4))
+    ax = fig.add_subplot(111)
+    ax.set_xlim([0, 0.65])
+    ax.set_ylim([0.85, 1.02])
+    title = 'NMI x mu'
+    ax.set_title(title)
+    ax.set_xlabel('μ')
+    ax.set_ylabel('NMI')
+    for method in methods:
+        N_condition_5k = (grid.scores['N'] == 5000)
+        N_condition_7k = (grid.scores['N'] == 7000)
+        N_condition_8k = (grid.scores['N'] == 8000)
+        N_condition_10k = (grid.scores['N'] == 10000)
+        N_condition_15k = (grid.scores['N'] == 15000)
+
+        method_condition = (grid.scores['METHOD'] == method)
+        data = grid.scores[method_condition & (N_condition_5k | N_condition_7k | N_condition_8k | N_condition_10k )]
+        if(method == 'K1'): color = 'r'; label = 'K1'; marker = '^'; 
+        if(method == 'M1'): color = 'g'; label = 'M1'; marker = '<';
+        if(method == 'R1'): color = 'b'; label = 'R1'; marker = '>';
+        if(method=='louvain'): color='gray'; label='louvain'; marker='o';
+                        
+        # average over multiple runs: determine confidence interval
+        x = data['mut']
+        y = data['SCORE']
+        mut_01_condition = (x == 0.1); y_01 = y[mut_01_condition]
+        mut_02_condition = (x == 0.2); y_02 = y[mut_02_condition]
+        mut_03_condition = (x == 0.3); y_03 = y[mut_03_condition]
+        mut_04_condition = (x == 0.4); y_04 = y[mut_04_condition]
+        mut_05_condition = (x == 0.5); y_05 = y[mut_05_condition]
+        mut_06_condition = (x == 0.6); y_06 = y[mut_06_condition]
+        ci_01 = sms.DescrStatsW(y_01).tconfint_mean()
+        ci_02 = sms.DescrStatsW(y_02).tconfint_mean()
+        ci_03 = sms.DescrStatsW(y_03).tconfint_mean()
+        ci_04 = sms.DescrStatsW(y_04).tconfint_mean()
+        ci_05 = sms.DescrStatsW(y_05).tconfint_mean()
+        ci_06 = sms.DescrStatsW(y_06).tconfint_mean()
+        # plot average of confidence interval
+        y_avg = [np.mean(ci_01), np.mean(ci_02), np.mean(ci_03), np.mean(ci_04), np.mean(ci_05), np.mean(ci_06)]
+        x_avg = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+        plt.scatter(x_avg, y_avg, color=color, label=label, marker=marker, alpha=0.3)
+    ax.legend(loc='best')
+    fig.savefig(out_folder + 'NMI_x_mu.png', dpi=my_dpi)
+    plt.close()
+
+
+    ###################################################################################################################
+    # SUMMARY PLOT NMI x N  ###########################################################################################
+    ###################################################################################################################
+    out_folder = '../graphs/'
+    my_dpi = 300
+    fig = plt.figure(figsize=(4, 4))
+    ax = fig.add_subplot(111)
+    #ax.set_xlim([0, 0.65])
+    ax.set_ylim([0.65, 1.02])
+    title = 'NMI x N'
+    ax.set_title(title)
+    ax.set_xlabel('N')
+    ax.set_ylabel('NMI')
+    for method in methods:
+        method_condition = (grid.scores['METHOD'] == method)
+        data = grid.scores[method_condition]
+        if(method == 'K1'): color = 'r'; label = 'K1'; marker = '^'; 
+        if(method == 'M1'): color = 'g'; label = 'M1'; marker = '<';
+        if(method == 'R1'): color = 'b'; label = 'R1'; marker = '>';
+        if(method=='louvain'): color='gray'; label='louvain'; marker='o';
+                        
+        # average over multiple runs: determine confidence interval
+        x = data['N']
+        y = data['SCORE']
+        N_01_condition = (x == 300); y_01 = y[N_01_condition]
+        N_02_condition = (x == 500); y_02 = y[N_02_condition]
+        N_03_condition = (x == 1000); y_03 = y[N_03_condition]
+        N_04_condition = (x == 2000); y_04 = y[N_04_condition]
+        N_05_condition = (x == 3000); y_05 = y[N_05_condition]
+        N_06_condition = (x == 5000); y_06 = y[N_06_condition]
+        N_07_condition = (x == 7000); y_07 = y[N_07_condition]
+        N_08_condition = (x == 8000); y_08 = y[N_08_condition]
+        N_09_condition = (x == 10000); y_09 = y[N_09_condition]
+        N_10_condition = (x == 15000); y_10 = y[N_10_condition]
+
+        ci_01 = sms.DescrStatsW(y_01).tconfint_mean()
+        ci_02 = sms.DescrStatsW(y_02).tconfint_mean()
+        ci_03 = sms.DescrStatsW(y_03).tconfint_mean()
+        ci_04 = sms.DescrStatsW(y_04).tconfint_mean()
+        ci_05 = sms.DescrStatsW(y_05).tconfint_mean()
+        ci_06 = sms.DescrStatsW(y_06).tconfint_mean()
+        ci_07 = sms.DescrStatsW(y_07).tconfint_mean()
+        ci_08 = sms.DescrStatsW(y_08).tconfint_mean()
+        ci_09 = sms.DescrStatsW(y_09).tconfint_mean()
+        ci_10 = sms.DescrStatsW(y_10).tconfint_mean()
+
+        # plot average of confidence interval
+        y_avg = [np.mean(ci_01), np.mean(ci_02), np.mean(ci_03), np.mean(ci_04), np.mean(ci_05), np.mean(ci_06), np.mean(ci_07), np.mean(ci_08), np.mean(ci_09), np.mean(ci_10)]
+        x_avg = [300, 500, 1000, 2000, 3000, 5000, 7000, 8000, 10000, 15000]
+        plt.scatter(x_avg, y_avg, color=color, label=label, marker=marker, alpha=0.3)
+    ax.legend(loc='best')
+    fig.savefig(out_folder + 'NMI_x_N.png', dpi=my_dpi)
+    plt.close()
+
+
+    ###################################################################################################################
+    # DETAILED PLOTS (as a function of all parameters)   ##############################################################
+    ###################################################################################################################
     for N in grid.N:
         out_folder_N = '../graphs/_N' + str(N) + '/'
         os.system('rm -rf ' + out_folder_N + ' && mkdir ' + out_folder_N)
@@ -82,7 +214,9 @@ def run():
                         if(method=='K1'): color='r'; label='K1'; marker='^'; 
                         if(method=='M1'): color='g'; label='M1'; marker='<';
                         if(method=='R1'): color='b'; label='R1'; marker='>';
-                        # average over multiple runs
+                        if(method=='louvain'): color='gray'; label='louvain'; marker='o';
+
+                        # average over multiple runs: determine confidence interval
                         x = data['mut']
                         y = data['SCORE']
                         mut_01_condition = (x == 0.1); y_01 = y[mut_01_condition]
@@ -97,10 +231,10 @@ def run():
                         ci_04 = sms.DescrStatsW(y_04).tconfint_mean()
                         ci_05 = sms.DescrStatsW(y_05).tconfint_mean()
                         ci_06 = sms.DescrStatsW(y_06).tconfint_mean()
-                        # plot average as points
+                        # plot average of confidence interval
                         y_avg = [np.mean(ci_01), np.mean(ci_02), np.mean(ci_03), np.mean(ci_04), np.mean(ci_05), np.mean(ci_06)]
                         x_avg = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
-                        plt.scatter(x_avg, y_avg, color=color, label=label, marker=marker)
+                        plt.scatter(x_avg, y_avg, color=color, label=label, marker=marker, alpha=0.3)
                         '''
                         # plot average as a smooth curve
                         xsmooth = np.linspace(x.min(),x.max(),300)
@@ -124,6 +258,64 @@ def run():
                     ax.legend(loc='best')
                     fig.savefig(out_folder_beta + 'k_' + str(k) + '.png', dpi=my_dpi)
                     plt.close()
+                    
+                    
+    ###################################################################################################################
+    # DETAILED PLOTS (one for each N folder)   ########################################################################
+    ###################################################################################################################
+    for N in grid.N:
+        out_folder_N = '../graphs/_N' + str(N) + '/'
+        my_dpi = 300
+        fig = plt.figure(figsize=(4, 4))
+        ax = fig.add_subplot(111)
+        ax.set_xlim([0, 0.65])
+        ax.set_ylim([-0.05, 1.05])
+        '''
+        if N==5000:
+            ax.set_xlim([0.05,0.65])
+            ax.set_ylim([0.95,1.002])
+        else:
+            ax.set_xlim([0.05,0.65])
+            ax.set_ylim([0.75,1.02])
+        '''
+        title = 'N: ' + str(N)
+        ax.set_title(title)
+        ax.set_xlabel('μ')
+        ax.set_ylabel('NMI')
+        for method in methods:
+            N_condition = (grid.scores['N'] == N)
+            method_condition = (grid.scores['METHOD'] == method)
+            data = grid.scores[N_condition & method_condition]
+            if(method == 'K1'): color = 'r'; label = 'K1'; marker = '^'; 
+            if(method == 'M1'): color = 'g'; label = 'M1'; marker = '<';
+            if(method == 'R1'): color = 'b'; label = 'R1'; marker = '>';
+            if(method=='louvain'): color='gray'; label='louvain'; marker='o';
+                        
+            # average over multiple runs: determine confidence interval
+            x = data['mut']
+            y = data['SCORE']
+            mut_01_condition = (x == 0.1); y_01 = y[mut_01_condition]
+            mut_02_condition = (x == 0.2); y_02 = y[mut_02_condition]
+            mut_03_condition = (x == 0.3); y_03 = y[mut_03_condition]
+            mut_04_condition = (x == 0.4); y_04 = y[mut_04_condition]
+            mut_05_condition = (x == 0.5); y_05 = y[mut_05_condition]
+            mut_06_condition = (x == 0.6); y_06 = y[mut_06_condition]
+            ci_01 = sms.DescrStatsW(y_01).tconfint_mean()
+            ci_02 = sms.DescrStatsW(y_02).tconfint_mean()
+            ci_03 = sms.DescrStatsW(y_03).tconfint_mean()
+            ci_04 = sms.DescrStatsW(y_04).tconfint_mean()
+            ci_05 = sms.DescrStatsW(y_05).tconfint_mean()
+            ci_06 = sms.DescrStatsW(y_06).tconfint_mean()
+            # plot average of confidence interval
+            y_avg = [np.mean(ci_01), np.mean(ci_02), np.mean(ci_03), np.mean(ci_04), np.mean(ci_05), np.mean(ci_06)]
+            x_avg = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+            plt.scatter(x_avg, y_avg, color=color, label=label, marker=marker, alpha=0.3)
+        ax.legend(loc='best')
+        fig.savefig(out_folder_N + str(N) +'.png', dpi=my_dpi)
+        plt.close()
+
+
+
 
 if __name__ == '__main__':
     print("\n---------------------------PLOTTING DreamDMI BENCHMARKS-------------------------\n")

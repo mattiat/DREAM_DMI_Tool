@@ -58,7 +58,7 @@ def score_benchmark(benchmark_network, benchmark_solution, numb_nodes):
 
 def run():
     grid = Grid()
-    methods = ['R1', 'M1', 'K1']
+    methods = ['R1', 'M1', 'K1', 'louvain']
     # Run Evaluation ##################################################################################################
     for N in grid.N:
         for k in grid.k:
