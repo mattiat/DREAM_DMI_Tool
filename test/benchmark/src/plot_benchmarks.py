@@ -68,7 +68,146 @@ def run():
     methods = ['R1', 'M1', 'K1', 'louvain']
 
     ###################################################################################################################
-    # SUMMARY PLOT NMI X mu  ##########################################################################################
+    # SUMMARY PLOT RESOURCES time vs N  ###############################################################################
+    ###################################################################################################################
+    out_folder = '../graphs/'
+    my_dpi = 300
+    fig = plt.figure(figsize=(4, 4))
+    ax = fig.add_subplot(111)
+    #ax.set_xlim([0, 0.65])
+    #ax.set_ylim([0.65, 1.02])
+    title = 'time (sec) vs N'
+    ax.set_title(title)
+    ax.set_xlabel('N')
+    ax.set_ylabel('sec')
+    x = [300, 500, 1000, 2000, 3000, 5000, 7000, 8000]
+
+    #R1
+    color = 'b'; label = 'R1'; marker = '>';
+    y = [
+        np.mean([37,30,26,32,34]),
+        np.mean([24]),
+        np.mean([50]),
+        np.mean([106]),
+        np.mean([118,113,117,137]),
+        np.mean([198,222,236,276]),
+        np.mean([313]),
+        np.mean([392])
+    ]
+    plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
+
+
+    #M1
+    color = 'g'; label = 'M1'; marker = '<';
+    y = [
+        np.mean([30,53,64,61,77]),
+        np.mean([91]),
+        np.mean([90]),
+        np.mean([150]),
+        np.mean([232,240,235,241]),
+        np.mean([504,505,539,618]),
+        np.mean([191]),
+        np.mean([237])
+        ]
+    plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
+
+    #K1
+    color = 'r'; label = 'K1'; marker = '^';
+    y = [
+        np.mean([5,8,8,9,10,11]),
+        np.mean([6]),
+        np.mean([14]),
+        np.mean([54]),
+        np.mean([111,111,118,127]),
+        np.mean([433,565,600,402]),
+        np.mean([870]),
+        np.mean([1260])
+        ]
+    plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
+
+    #louvain
+    color='gray'; label='louvain'; marker='o';
+    y = [1,1,1,1,1,2,2,2]
+    plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
+
+    ax.legend(loc='best')
+    fig.savefig(out_folder + 'time_vs_N.png', dpi=my_dpi)
+    plt.close()
+
+    ###################################################################################################################
+    # SUMMARY PLOT RESOURCES max RAM vs N  ############################################################################
+    ###################################################################################################################
+    out_folder = '../graphs/'
+    my_dpi = 300
+    fig = plt.figure(figsize=(4, 4))
+    ax = fig.add_subplot(111)
+    #ax.set_xlim([0, 0.65])
+    #ax.set_ylim([0.65, 1.02])
+    title = 'RAM (max) vs N'
+    ax.set_title(title)
+    ax.set_xlabel('N')
+    ax.set_ylabel('MB')
+    x = [300, 500, 1000, 2000, 3000, 5000, 7000, 8000]
+ 
+    #R1
+    color = 'b'; label = 'R1'; marker = '>';
+    ci_300 = sms.DescrStatsW([46, 106,22,98,36,56]).tconfint_mean()
+    ci_500 = sms.DescrStatsW([52,38,36,38,32,29,65,51,38]).tconfint_mean()
+    ci_1k = sms.DescrStatsW([45,82,12,36,57,39]).tconfint_mean()
+    ci_2k = sms.DescrStatsW([82,60,96,89,84,81]).tconfint_mean()
+    ci_3k = sms.DescrStatsW([57,118,131,162]).tconfint_mean()
+    ci_5k = sms.DescrStatsW([141,255,341,538]).tconfint_mean()
+    ci_7k = sms.DescrStatsW([280,281]).tconfint_mean()
+    ci_8k = sms.DescrStatsW([337,338]).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k)]
+    plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
+
+    #M1
+    color = 'g'; label = 'M1'; marker = '<';
+    ci_300 = sms.DescrStatsW([89,31,36,81]).tconfint_mean()
+    ci_500 = sms.DescrStatsW([36,31,31,46,35]).tconfint_mean()
+    ci_1k = sms.DescrStatsW([68,55,64,135,47,41]).tconfint_mean()
+    ci_2k = sms.DescrStatsW([46,29,34,42,47,76]).tconfint_mean()
+    ci_3k = sms.DescrStatsW([58,70,254,218]).tconfint_mean()
+    ci_5k = sms.DescrStatsW([90,91,686,422,1222]).tconfint_mean()
+    ci_7k = sms.DescrStatsW([188,189]).tconfint_mean()
+    ci_8k = sms.DescrStatsW([37,38]).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k)]
+    plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
+
+    #K1
+    color = 'r'; label = 'K1'; marker = '^';
+    ci_300 = sms.DescrStatsW([79,28,27,68,44,62]).tconfint_mean()
+    ci_500 = sms.DescrStatsW([17,18,28,18,18,33,26]).tconfint_mean()
+    ci_1k = sms.DescrStatsW([41,37,31,19,10,110]).tconfint_mean()
+    ci_2k = sms.DescrStatsW([102,72,85,73,122,162]).tconfint_mean()
+    ci_3k = sms.DescrStatsW([153,245,297,643]).tconfint_mean()
+    ci_5k = sms.DescrStatsW([114,577,310,317]).tconfint_mean()
+    ci_7k = sms.DescrStatsW([429,430]).tconfint_mean()
+    ci_8k = sms.DescrStatsW([382,383]).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k)]
+    plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
+
+
+    #louvain
+    color='gray'; label='louvain'; marker='o';
+    ci_300 = sms.DescrStatsW([6,7]).tconfint_mean()
+    ci_500 = sms.DescrStatsW([5,6]).tconfint_mean()
+    ci_1k = sms.DescrStatsW([8,9]).tconfint_mean()
+    ci_2k = sms.DescrStatsW([10,21]).tconfint_mean()
+    ci_3k = sms.DescrStatsW([10,7,8,3]).tconfint_mean()
+    ci_5k = sms.DescrStatsW([8,4,4]).tconfint_mean()
+    ci_7k = sms.DescrStatsW([8,9]).tconfint_mean()
+    ci_8k = sms.DescrStatsW([6,7]).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k)]
+    plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
+
+    ax.legend(loc='best')
+    fig.savefig(out_folder + 'RAM_vs_N.png', dpi=my_dpi)
+    plt.close()
+
+    ###################################################################################################################
+    # SUMMARY PLOT NMI vs mu  #########################################################################################
     ###################################################################################################################
     out_folder = '../graphs/'
     my_dpi = 300
@@ -76,7 +215,7 @@ def run():
     ax = fig.add_subplot(111)
     ax.set_xlim([0, 0.65])
     ax.set_ylim([0.85, 1.02])
-    title = 'NMI x mu'
+    title = 'NMI vs mu'
     ax.set_title(title)
     ax.set_xlabel('μ')
     ax.set_ylabel('NMI')
@@ -114,12 +253,12 @@ def run():
         x_avg = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
         plt.scatter(x_avg, y_avg, color=color, label=label, marker=marker, alpha=0.3)
     ax.legend(loc='best')
-    fig.savefig(out_folder + 'NMI_x_mu.png', dpi=my_dpi)
+    fig.savefig(out_folder + 'NMI_vs_mu.png', dpi=my_dpi)
     plt.close()
 
 
     ###################################################################################################################
-    # SUMMARY PLOT NMI x N  ###########################################################################################
+    # SUMMARY PLOT NMI vs N  ###########################################################################################
     ###################################################################################################################
     out_folder = '../graphs/'
     my_dpi = 300
@@ -127,7 +266,7 @@ def run():
     ax = fig.add_subplot(111)
     #ax.set_xlim([0, 0.65])
     ax.set_ylim([0.65, 1.02])
-    title = 'NMI x N'
+    title = 'NMI vs N'
     ax.set_title(title)
     ax.set_xlabel('N')
     ax.set_ylabel('NMI')
@@ -169,7 +308,7 @@ def run():
         x_avg = [300, 500, 1000, 2000, 3000, 5000, 7000, 8000, 10000, 15000]
         plt.scatter(x_avg, y_avg, color=color, label=label, marker=marker, alpha=0.3)
     ax.legend(loc='best')
-    fig.savefig(out_folder + 'NMI_x_N.png', dpi=my_dpi)
+    fig.savefig(out_folder + 'NMI_vs_N.png', dpi=my_dpi)
     plt.close()
 
 
