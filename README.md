@@ -34,7 +34,7 @@ The format for the input network is the following: a tab-separated file containi
 nodeA and nodeB are of type *integer*, weight_AB is of type *float*.
 
 
-For an example, see the contents of test/input/.
+For an example, see the contents of test/system_test/input/.
 
 ## BENCHMARKING
 see test/benchmarking
