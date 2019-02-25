@@ -36,34 +36,38 @@ from scipy import interpolate
 import statsmodels.stats.api as sms
 
 def run():
-    grid5 = Grid().scores = pd.read_csv("../graphs/grid5.tsv", sep='\t')
-    grid6 = Grid().scores = pd.read_csv("../graphs/grid6.tsv", sep='\t')
-    grid6b = Grid().scores = pd.read_csv("../graphs/grid6.tsv", sep='\t') # "6" is the only 8k experiment
-    grid7 = Grid().scores = pd.read_csv("../graphs/grid7.tsv", sep='\t')
-    grid7b = Grid().scores = pd.read_csv("../graphs/grid7.tsv", sep='\t') # only 10k
-    grid8 = Grid().scores = pd.read_csv("../graphs/grid8.tsv", sep='\t')
-    grid9 = Grid().scores = pd.read_csv("../graphs/grid9.tsv", sep='\t')
-    grid10 = Grid().scores = pd.read_csv("../graphs/grid10.tsv", sep='\t')
-    grid10b = Grid().scores = pd.read_csv("../graphs/grid10.tsv", sep='\t') # only 300
-    grid11 = Grid().scores = pd.read_csv("../graphs/grid11.tsv", sep='\t')
-    grid12 = Grid().scores = pd.read_csv("../graphs/grid12.tsv", sep='\t')
-    grid12b = Grid().scores = pd.read_csv("../graphs/grid12.tsv", sep='\t')
-
+    grid5 = Grid().scores = pd.read_csv("../graphs/__score/grid5.tsv", sep='\t')
+    grid6 = Grid().scores = pd.read_csv("../graphs/__score/grid6.tsv", sep='\t')
+    grid7 = Grid().scores = pd.read_csv("../graphs/__score/grid7.tsv", sep='\t')
+    grid8 = Grid().scores = pd.read_csv("../graphs/__score/grid8.tsv", sep='\t')
+    grid9 = Grid().scores = pd.read_csv("../graphs/__score/grid9.tsv", sep='\t')
+    grid10 = Grid().scores = pd.read_csv("../graphs/__score/grid10.tsv", sep='\t')
+    grid11 = Grid().scores = pd.read_csv("../graphs/__score/grid11.tsv", sep='\t')
+    grid12 = Grid().scores = pd.read_csv("../graphs/__score/grid12.tsv", sep='\t')
+    grid13 = Grid().scores = pd.read_csv("../graphs/__score/grid13.tsv", sep='\t')
+    grid14 = Grid().scores = pd.read_csv("../graphs/__score/grid14.tsv", sep='\t')
+    grid15 = Grid().scores = pd.read_csv("../graphs/__score/grid15.tsv", sep='\t')
+    grid16 = Grid().scores = pd.read_csv("../graphs/__score/grid16.tsv", sep='\t')
+    grid17 = Grid().scores = pd.read_csv("../graphs/__score/grid17.tsv", sep='\t')
+    grid18 = Grid().scores = pd.read_csv("../graphs/__score/grid18.tsv", sep='\t')
+    grid19 = Grid().scores = pd.read_csv("../graphs/__score/grid19.tsv", sep='\t')
+    grid20 = Grid().scores = pd.read_csv("../graphs/__score/grid20.tsv", sep='\t')
+    grid21 = Grid().scores = pd.read_csv("../graphs/__score/grid21.tsv", sep='\t')
 
     grid = Grid()
     grid.scores = pd.concat([
-        grid5, 
-        grid6,
-        grid6b,
-        grid7,
-        grid7b,
-        grid8,
-        grid9,
-        grid10,
-        grid10b,
-        grid11,
-        grid12,
-        grid12b])
+        grid5, grid6, grid7, grid8, grid9, grid10, grid11, grid12,
+        grid13, grid14, grid15, grid16, grid17, grid18, grid19, grid20, grid21])
+
+    resource_meter13 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage13.tsv", sep='\t')
+    resource_meter14 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage14.tsv", sep='\t')
+    resource_meter15 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage15.tsv", sep='\t')
+    resource_meter16 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage16.tsv", sep='\t')
+    resource_meter17 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage17.tsv", sep='\t')
+    resource_meter18 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage18.tsv", sep='\t')
+    resource_meter19 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage19.tsv", sep='\t')
+    resource_meter20 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage20.tsv", sep='\t')
+    resource_meter21 = Grid().resources = pd.read_csv("../graphs/__resource_usage/benchmark_resource_usage21.tsv", sep='\t')
 
     methods = ['R1', 'M1', 'K1', 'louvain']
 
@@ -72,62 +76,111 @@ def run():
     ###################################################################################################################
     out_folder = '../graphs/'
     my_dpi = 300
-    fig = plt.figure(figsize=(4, 4))
+    fig = plt.figure(figsize=(6, 6))
     ax = fig.add_subplot(111)
     #ax.set_xlim([0, 0.65])
     #ax.set_ylim([0.65, 1.02])
-    title = 'time (sec) vs N'
+    title = 'Run-time vs network size'
     ax.set_title(title)
-    ax.set_xlabel('N')
-    ax.set_ylabel('sec')
-    x = [300, 500, 1000, 2000, 3000, 5000, 7000, 8000]
+    ax.set_xlabel('number of nodes')
+    ax.set_ylabel('seconds')
+    x = [300, 500, 1000, 2000, 3000, 5000, 7000, 8000, 10000]
 
     #R1
     color = 'b'; label = 'R1'; marker = '>';
-    y = [
-        np.mean([37,30,26,32,34]),
-        np.mean([24]),
-        np.mean([50]),
-        np.mean([106]),
-        np.mean([118,113,117,137]),
-        np.mean([198,222,236,276]),
-        np.mean([313]),
-        np.mean([392])
-    ]
+    method_condition = (resource_meter13['method'] == label)
+    resource_meter_300 =resource_meter13[method_condition]['time']
+    ci_300 = sms.DescrStatsW(resource_meter_300).tconfint_mean()
+    resource_meter_500 = resource_meter14[method_condition]['time']
+    ci_500 = sms.DescrStatsW(resource_meter_500).tconfint_mean()
+    resource_meter_1k = resource_meter15[method_condition]['time']
+    ci_1k = sms.DescrStatsW(resource_meter_1k).tconfint_mean()
+    resource_meter_2k = resource_meter16[method_condition]['time']
+    ci_2k = sms.DescrStatsW(resource_meter_2k).tconfint_mean()
+    resource_meter_3k = resource_meter17[method_condition]['time']
+    ci_3k = sms.DescrStatsW(resource_meter_3k).tconfint_mean()
+    resource_meter_5k = resource_meter18[method_condition]['time']
+    ci_5k = sms.DescrStatsW(resource_meter_5k).tconfint_mean()
+    resource_meter_7k = resource_meter19[method_condition]['time']
+    ci_7k = sms.DescrStatsW(resource_meter_7k).tconfint_mean()
+    resource_meter_8k = resource_meter20[method_condition]['time']
+    ci_8k = sms.DescrStatsW(resource_meter_8k).tconfint_mean()
+    resource_meter_10k = resource_meter21[method_condition]['time']
+    ci_10k = sms.DescrStatsW(resource_meter_10k).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k),np.mean(ci_10k)]
     plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
 
 
     #M1
     color = 'g'; label = 'M1'; marker = '<';
-    y = [
-        np.mean([30,53,64,61,77]),
-        np.mean([91]),
-        np.mean([90]),
-        np.mean([150]),
-        np.mean([232,240,235,241]),
-        np.mean([504,505,539,618]),
-        np.mean([191]),
-        np.mean([237])
-        ]
+    method_condition = (resource_meter13['method'] == label)
+    resource_meter_300 =resource_meter13[method_condition]['time']
+    ci_300 = sms.DescrStatsW(resource_meter_300).tconfint_mean()
+    resource_meter_500 = resource_meter14[method_condition]['time']
+    ci_500 = sms.DescrStatsW(resource_meter_500).tconfint_mean()
+    resource_meter_1k = resource_meter15[method_condition]['time']
+    ci_1k = sms.DescrStatsW(resource_meter_1k).tconfint_mean()
+    resource_meter_2k = resource_meter16[method_condition]['time']
+    ci_2k = sms.DescrStatsW(resource_meter_2k).tconfint_mean()
+    resource_meter_3k = resource_meter17[method_condition]['time']
+    ci_3k = sms.DescrStatsW(resource_meter_3k).tconfint_mean()
+    resource_meter_5k = resource_meter18[method_condition]['time']
+    ci_5k = sms.DescrStatsW(resource_meter_5k).tconfint_mean()
+    resource_meter_7k = resource_meter19[method_condition]['time']
+    ci_7k = sms.DescrStatsW(resource_meter_7k).tconfint_mean()
+    resource_meter_8k = resource_meter20[method_condition]['time']
+    ci_8k = sms.DescrStatsW(resource_meter_8k).tconfint_mean()
+    resource_meter_10k = resource_meter21[method_condition]['time']
+    ci_10k = sms.DescrStatsW(resource_meter_10k).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k),np.mean(ci_10k)]
     plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
 
     #K1
     color = 'r'; label = 'K1'; marker = '^';
-    y = [
-        np.mean([5,8,8,9,10,11]),
-        np.mean([6]),
-        np.mean([14]),
-        np.mean([54]),
-        np.mean([111,111,118,127]),
-        np.mean([433,565,600,402]),
-        np.mean([870]),
-        np.mean([1260])
-        ]
+    method_condition = (resource_meter13['method'] == label)
+    resource_meter_300 =resource_meter13[method_condition]['time']
+    ci_300 = sms.DescrStatsW(resource_meter_300).tconfint_mean()
+    resource_meter_500 = resource_meter14[method_condition]['time']
+    ci_500 = sms.DescrStatsW(resource_meter_500).tconfint_mean()
+    resource_meter_1k = resource_meter15[method_condition]['time']
+    ci_1k = sms.DescrStatsW(resource_meter_1k).tconfint_mean()
+    resource_meter_2k = resource_meter16[method_condition]['time']
+    ci_2k = sms.DescrStatsW(resource_meter_2k).tconfint_mean()
+    resource_meter_3k = resource_meter17[method_condition]['time']
+    ci_3k = sms.DescrStatsW(resource_meter_3k).tconfint_mean()
+    resource_meter_5k = resource_meter18[method_condition]['time']
+    ci_5k = sms.DescrStatsW(resource_meter_5k).tconfint_mean()
+    resource_meter_7k = resource_meter19[method_condition]['time']
+    ci_7k = sms.DescrStatsW(resource_meter_7k).tconfint_mean()
+    resource_meter_8k = resource_meter20[method_condition]['time']
+    ci_8k = sms.DescrStatsW(resource_meter_8k).tconfint_mean()
+    resource_meter_10k = resource_meter21[method_condition]['time']
+    ci_10k = sms.DescrStatsW(resource_meter_10k).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k),np.mean(ci_10k)]
     plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
 
     #louvain
     color='gray'; label='louvain'; marker='o';
-    y = [1,1,1,1,1,2,2,2]
+    method_condition = (resource_meter13['method'] == 'L')
+    resource_meter_300 =resource_meter13[method_condition]['time']
+    ci_300 = sms.DescrStatsW(resource_meter_300).tconfint_mean()
+    resource_meter_500 = resource_meter14[method_condition]['time']
+    ci_500 = sms.DescrStatsW(resource_meter_500).tconfint_mean()
+    resource_meter_1k = resource_meter15[method_condition]['time']
+    ci_1k = sms.DescrStatsW(resource_meter_1k).tconfint_mean()
+    resource_meter_2k = resource_meter16[method_condition]['time']
+    ci_2k = sms.DescrStatsW(resource_meter_2k).tconfint_mean()
+    resource_meter_3k = resource_meter17[method_condition]['time']
+    ci_3k = sms.DescrStatsW(resource_meter_3k).tconfint_mean()
+    resource_meter_5k = resource_meter18[method_condition]['time']
+    ci_5k = sms.DescrStatsW(resource_meter_5k).tconfint_mean()
+    resource_meter_7k = resource_meter19[method_condition]['time']
+    ci_7k = sms.DescrStatsW(resource_meter_7k).tconfint_mean()
+    resource_meter_8k = resource_meter20[method_condition]['time']
+    ci_8k = sms.DescrStatsW(resource_meter_8k).tconfint_mean()
+    resource_meter_10k = resource_meter21[method_condition]['time']
+    ci_10k = sms.DescrStatsW(resource_meter_10k).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k),np.mean(ci_10k)]
     plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
 
     ax.legend(loc='best')
@@ -139,67 +192,112 @@ def run():
     ###################################################################################################################
     out_folder = '../graphs/'
     my_dpi = 300
-    fig = plt.figure(figsize=(4, 4))
+    fig = plt.figure(figsize=(6, 6))
     ax = fig.add_subplot(111)
     #ax.set_xlim([0, 0.65])
     #ax.set_ylim([0.65, 1.02])
-    title = 'RAM (max) vs N'
+    title = 'RAM usage (max) vs network size'
     ax.set_title(title)
-    ax.set_xlabel('N')
+    ax.set_xlabel('number of nodes')
     ax.set_ylabel('MB')
-    x = [300, 500, 1000, 2000, 3000, 5000, 7000, 8000]
- 
+    x = [300, 500, 1000, 2000, 3000, 5000, 7000, 8000, 10000]
+    resource_condition = 'max_RAM'
+    
     #R1
     color = 'b'; label = 'R1'; marker = '>';
-    ci_300 = sms.DescrStatsW([46, 106,22,98,36,56]).tconfint_mean()
-    ci_500 = sms.DescrStatsW([52,38,36,38,32,29,65,51,38]).tconfint_mean()
-    ci_1k = sms.DescrStatsW([45,82,12,36,57,39]).tconfint_mean()
-    ci_2k = sms.DescrStatsW([82,60,96,89,84,81]).tconfint_mean()
-    ci_3k = sms.DescrStatsW([57,118,131,162]).tconfint_mean()
-    ci_5k = sms.DescrStatsW([141,255,341,538]).tconfint_mean()
-    ci_7k = sms.DescrStatsW([280,281]).tconfint_mean()
-    ci_8k = sms.DescrStatsW([337,338]).tconfint_mean()
-    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k)]
+    method_condition = (resource_meter13['method'] == label)
+    resource_meter_300 =resource_meter13[method_condition][resource_condition]
+    ci_300 = sms.DescrStatsW(resource_meter_300).tconfint_mean()
+    resource_meter_500 = resource_meter14[method_condition][resource_condition]
+    ci_500 = sms.DescrStatsW(resource_meter_500).tconfint_mean()
+    resource_meter_1k = resource_meter15[method_condition][resource_condition]
+    ci_1k = sms.DescrStatsW(resource_meter_1k).tconfint_mean()
+    resource_meter_2k = resource_meter16[method_condition][resource_condition]
+    ci_2k = sms.DescrStatsW(resource_meter_2k).tconfint_mean()
+    resource_meter_3k = resource_meter17[method_condition][resource_condition]
+    ci_3k = sms.DescrStatsW(resource_meter_3k).tconfint_mean()
+    resource_meter_5k = resource_meter18[method_condition][resource_condition]
+    ci_5k = sms.DescrStatsW(resource_meter_5k).tconfint_mean()
+    resource_meter_7k = resource_meter19[method_condition][resource_condition]
+    ci_7k = sms.DescrStatsW(resource_meter_7k).tconfint_mean()
+    resource_meter_8k = resource_meter20[method_condition][resource_condition]
+    ci_8k = sms.DescrStatsW(resource_meter_8k).tconfint_mean()
+    resource_meter_10k = resource_meter21[method_condition][resource_condition]
+    ci_10k = sms.DescrStatsW(resource_meter_10k).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k),np.mean(ci_10k)]
     plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
 
     #M1
     color = 'g'; label = 'M1'; marker = '<';
-    ci_300 = sms.DescrStatsW([89,31,36,81]).tconfint_mean()
-    ci_500 = sms.DescrStatsW([36,31,31,46,35]).tconfint_mean()
-    ci_1k = sms.DescrStatsW([68,55,64,135,47,41]).tconfint_mean()
-    ci_2k = sms.DescrStatsW([46,29,34,42,47,76]).tconfint_mean()
-    ci_3k = sms.DescrStatsW([58,70,254,218]).tconfint_mean()
-    ci_5k = sms.DescrStatsW([90,91,686,422,1222]).tconfint_mean()
-    ci_7k = sms.DescrStatsW([188,189]).tconfint_mean()
-    ci_8k = sms.DescrStatsW([37,38]).tconfint_mean()
-    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k)]
+    method_condition = (resource_meter13['method'] == label)
+    resource_meter_300 =resource_meter13[method_condition][resource_condition]
+    ci_300 = sms.DescrStatsW(resource_meter_300).tconfint_mean()
+    resource_meter_500 = resource_meter14[method_condition][resource_condition]
+    ci_500 = sms.DescrStatsW(resource_meter_500).tconfint_mean()
+    resource_meter_1k = resource_meter15[method_condition][resource_condition]
+    ci_1k = sms.DescrStatsW(resource_meter_1k).tconfint_mean()
+    resource_meter_2k = resource_meter16[method_condition][resource_condition]
+    ci_2k = sms.DescrStatsW(resource_meter_2k).tconfint_mean()
+    resource_meter_3k = resource_meter17[method_condition][resource_condition]
+    ci_3k = sms.DescrStatsW(resource_meter_3k).tconfint_mean()
+    resource_meter_5k = resource_meter18[method_condition][resource_condition]
+    ci_5k = sms.DescrStatsW(resource_meter_5k).tconfint_mean()
+    resource_meter_7k = resource_meter19[method_condition][resource_condition]
+    ci_7k = sms.DescrStatsW(resource_meter_7k).tconfint_mean()
+    resource_meter_8k = resource_meter20[method_condition][resource_condition]
+    ci_8k = sms.DescrStatsW(resource_meter_8k).tconfint_mean()
+    resource_meter_10k = resource_meter21[method_condition][resource_condition]
+    ci_10k = sms.DescrStatsW(resource_meter_10k).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k),np.mean(ci_10k)]
     plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
 
     #K1
     color = 'r'; label = 'K1'; marker = '^';
-    ci_300 = sms.DescrStatsW([79,28,27,68,44,62]).tconfint_mean()
-    ci_500 = sms.DescrStatsW([17,18,28,18,18,33,26]).tconfint_mean()
-    ci_1k = sms.DescrStatsW([41,37,31,19,10,110]).tconfint_mean()
-    ci_2k = sms.DescrStatsW([102,72,85,73,122,162]).tconfint_mean()
-    ci_3k = sms.DescrStatsW([153,245,297,643]).tconfint_mean()
-    ci_5k = sms.DescrStatsW([114,577,310,317]).tconfint_mean()
-    ci_7k = sms.DescrStatsW([429,430]).tconfint_mean()
-    ci_8k = sms.DescrStatsW([382,383]).tconfint_mean()
-    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k)]
+    method_condition = (resource_meter13['method'] == label)
+    resource_meter_300 =resource_meter13[method_condition][resource_condition]
+    ci_300 = sms.DescrStatsW(resource_meter_300).tconfint_mean()
+    resource_meter_500 = resource_meter14[method_condition][resource_condition]
+    ci_500 = sms.DescrStatsW(resource_meter_500).tconfint_mean()
+    resource_meter_1k = resource_meter15[method_condition][resource_condition]
+    ci_1k = sms.DescrStatsW(resource_meter_1k).tconfint_mean()
+    resource_meter_2k = resource_meter16[method_condition][resource_condition]
+    ci_2k = sms.DescrStatsW(resource_meter_2k).tconfint_mean()
+    resource_meter_3k = resource_meter17[method_condition][resource_condition]
+    ci_3k = sms.DescrStatsW(resource_meter_3k).tconfint_mean()
+    resource_meter_5k = resource_meter18[method_condition][resource_condition]
+    ci_5k = sms.DescrStatsW(resource_meter_5k).tconfint_mean()
+    resource_meter_7k = resource_meter19[method_condition][resource_condition]
+    ci_7k = sms.DescrStatsW(resource_meter_7k).tconfint_mean()
+    resource_meter_8k = resource_meter20[method_condition][resource_condition]
+    ci_8k = sms.DescrStatsW(resource_meter_8k).tconfint_mean()
+    resource_meter_10k = resource_meter21[method_condition][resource_condition]
+    ci_10k = sms.DescrStatsW(resource_meter_10k).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k),np.mean(ci_10k)]
     plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
 
 
     #louvain
     color='gray'; label='louvain'; marker='o';
-    ci_300 = sms.DescrStatsW([6,7]).tconfint_mean()
-    ci_500 = sms.DescrStatsW([5,6]).tconfint_mean()
-    ci_1k = sms.DescrStatsW([8,9]).tconfint_mean()
-    ci_2k = sms.DescrStatsW([10,21]).tconfint_mean()
-    ci_3k = sms.DescrStatsW([10,7,8,3]).tconfint_mean()
-    ci_5k = sms.DescrStatsW([8,4,4]).tconfint_mean()
-    ci_7k = sms.DescrStatsW([8,9]).tconfint_mean()
-    ci_8k = sms.DescrStatsW([6,7]).tconfint_mean()
-    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k)]
+    method_condition = (resource_meter13['method'] == 'L')
+    resource_meter_300 =resource_meter13[method_condition][resource_condition]
+    ci_300 = sms.DescrStatsW(resource_meter_300).tconfint_mean()
+    resource_meter_500 = resource_meter14[method_condition][resource_condition]
+    ci_500 = sms.DescrStatsW(resource_meter_500).tconfint_mean()
+    resource_meter_1k = resource_meter15[method_condition][resource_condition]
+    ci_1k = sms.DescrStatsW(resource_meter_1k).tconfint_mean()
+    resource_meter_2k = resource_meter16[method_condition][resource_condition]
+    ci_2k = sms.DescrStatsW(resource_meter_2k).tconfint_mean()
+    resource_meter_3k = resource_meter17[method_condition][resource_condition]
+    ci_3k = sms.DescrStatsW(resource_meter_3k).tconfint_mean()
+    resource_meter_5k = resource_meter18[method_condition][resource_condition]
+    ci_5k = sms.DescrStatsW(resource_meter_5k).tconfint_mean()
+    resource_meter_7k = resource_meter19[method_condition][resource_condition]
+    ci_7k = sms.DescrStatsW(resource_meter_7k).tconfint_mean()
+    resource_meter_8k = resource_meter20[method_condition][resource_condition]
+    ci_8k = sms.DescrStatsW(resource_meter_8k).tconfint_mean()
+    resource_meter_10k = resource_meter21[method_condition][resource_condition]
+    ci_10k = sms.DescrStatsW(resource_meter_10k).tconfint_mean()
+    y = [np.mean(ci_300),np.mean(ci_500),np.mean(ci_1k),np.mean(ci_2k),np.mean(ci_3k),np.mean(ci_5k),np.mean(ci_7k),np.mean(ci_8k),np.mean(ci_10k)]
     plt.scatter(x, y, color=color, label=label, marker=marker, alpha=0.3)
 
     ax.legend(loc='best')
@@ -211,14 +309,14 @@ def run():
     ###################################################################################################################
     out_folder = '../graphs/'
     my_dpi = 300
-    fig = plt.figure(figsize=(4, 4))
+    fig = plt.figure(figsize=(6, 6))
     ax = fig.add_subplot(111)
     ax.set_xlim([0, 0.65])
-    ax.set_ylim([0.85, 1.02])
-    title = 'NMI vs mu'
+    ax.set_ylim([0.85, 1.01])
+    title = 'Clustering performance (NMI) vs mixing parameter'
     ax.set_title(title)
-    ax.set_xlabel('μ')
-    ax.set_ylabel('NMI')
+    ax.set_xlabel('fraction of intra-community edges')
+    ax.set_ylabel('Clustering performance (Normalized Mutual Information)')
     for method in methods:
         N_condition_5k = (grid.scores['N'] == 5000)
         N_condition_7k = (grid.scores['N'] == 7000)
@@ -262,14 +360,14 @@ def run():
     ###################################################################################################################
     out_folder = '../graphs/'
     my_dpi = 300
-    fig = plt.figure(figsize=(4, 4))
+    fig = plt.figure(figsize=(6, 6))
     ax = fig.add_subplot(111)
     #ax.set_xlim([0, 0.65])
     ax.set_ylim([0.65, 1.02])
-    title = 'NMI vs N'
+    title = 'Clustering performance (NMI) vs network size'
     ax.set_title(title)
-    ax.set_xlabel('N')
-    ax.set_ylabel('NMI')
+    ax.set_xlabel('number of nodes')
+    ax.set_ylabel('Clustering performance (Normalized Mutual Information)')
     for method in methods:
         method_condition = (grid.scores['METHOD'] == method)
         data = grid.scores[method_condition]

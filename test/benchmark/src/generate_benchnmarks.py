@@ -36,6 +36,8 @@ class Grid(object):
     beta = [1, 2]
     t1 = [2, 3]
     scores = pd.DataFrame(columns=['N', 'k', 'mut', 'beta', 't1', 'METHOD', 'SCORE'])
+    resources = pd.DataFrame(columns=['method', 'time', 'max_RAM', 'mean_RAM'])
+
     
 def run():
     for N in Grid.N:
